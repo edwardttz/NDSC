@@ -9,3 +9,8 @@ def saveResultToCsv(npArr, outputFile):
 	fmt = '%s,%s'
 	np.savetxt(outputFile, npArr, delimiter=",", fmt=fmt)
 
+def trainModel(input_np):
+
+
+
+def processTestData(input_np):

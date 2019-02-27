@@ -3,3 +3,6 @@ data_info_val_sample_submission.csv
 test.csv
 train.csv
 __pycache__
+beauty_image*
+mobile_image*
+fashion_image*
