@@ -2,3 +2,4 @@ categories.json
 data_info_val_sample_submission.csv
 test.csv
 train.csv
+__pycache__
