@@ -42,3 +42,8 @@ def readJsonFile(jsonFile):
 	except:
 		print("Stop frying my brain, I can't handle your pan")
 	return jsonArr
+
+def saveToJsonFile(json_dict, jsonFile):
+	jsonFile = __path__ + jsonFile
+	with open(jsonFile, "w") as json_write:
+		json.dump(json_dict, json_write)

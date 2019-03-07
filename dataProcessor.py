@@ -1,6 +1,7 @@
 import numpy as np
 
 def processTestData(input_np):
+	model_dict = helper.readJsonFile("model.json")
 	output_np = np.array(['itemid','Category'])
 	count = 0
 	for row in input_np:

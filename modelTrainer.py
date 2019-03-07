@@ -3,7 +3,8 @@ import helper
 
 def trainModel(input_np):
 	jsonList = helper.readJsonFile("categories.json")
-	print(jsonList)
+	model_dict = {}
+	# print(jsonList)
 	count = 0
 	for row in input_np:
 		# Ignore the header line
@@ -14,5 +15,9 @@ def trainModel(input_np):
 		item_title = row[1]
 		item_cat = row[2]
 		img_np = np.array(helper.readImageToNumpy(row[3]))
-		print(img_np)
-		break
+		# print(img_np)
+		# break
+		
+
+	# End result of the model
+	helper.saveToJsonFile(model_dict, "model.json")
