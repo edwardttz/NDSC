@@ -1,7 +1,7 @@
 import numpy as np
 
 def processTestData(input_np):
-	output_np = np.array([])
+	output_np = np.array(['itemid','Category'])
 	count = 0
 	for row in input_np:
 		if(count == 0):
