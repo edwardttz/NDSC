@@ -14,4 +14,5 @@ def trainModel(input_np):
 		item_title = row[1]
 		item_cat = row[2]
 		img_np = np.array(helper.readImageToNumpy(row[3]))
-		# break
+		print(img_np)
+		break

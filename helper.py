@@ -28,7 +28,7 @@ def saveResultToCsv(npArr, outputFile):
 
 def readImageToNumpy(imageFile):
 	try:
-		img = cv2.imread(imageFile, 1)
+		img = np.array(cv2.imread(imageFile, 1))
 	except:
 		print("Are you trying to read something out loud to me? I see no image here.")
 		img = []
