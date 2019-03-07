@@ -4,4 +4,14 @@ import helper
 def trainModel(input_np):
 	jsonList = helper.readJsonFile("categories.json")
 	print(jsonList)
-	print(helper.readImageToNumpy("mobile_image/000a5df2a604db41dd082527ea71b4b6.jpg"))
+	count = 0
+	for row in input_np:
+		# Ignore the header line
+		if(count == 0):
+			count += 1
+			continue
+		item_id = row[0]
+		item_title = row[1]
+		item_cat = row[2]
+		img_np = np.array(helper.readImageToNumpy(row[3]))
+		# break

@@ -14,13 +14,17 @@ def readCsvToNumpy(inputFile):
 	return input_np
 
 def saveResultToCsv(npArr, outputFile):
-	fmt = '%s,%s'
-	outputFile = __path__ + outputFile
-	try:
-		np.savetxt(outputFile, npArr, delimiter=",", fmt=fmt)
-	except:
-		print("My brain is fried, please save me... :(")
-		exit()
+	fmt = ''
+	if(npArr.shape[0] != 0 and npArr.shape[1] >= 1):
+		fmt = '%s'
+		for i in range(npArr.shape[1] - 1):
+			fmt += ',%s'
+		outputFile = __path__ + outputFile
+		try:
+			np.savetxt(outputFile, npArr, delimiter=",", fmt=fmt)
+		except:
+			print("My brain is fried, please save me... :(")
+			exit()
 
 def readImageToNumpy(imageFile):
 	try:

@@ -28,8 +28,8 @@ def main():
 		output_np = dataProcessor.processTestData(input_np)
 		print("Complete processing data")
 		# Process test data ends here
-		helper.saveResultToCsv(output_np, outputFile)	
-		print("Saved to csv")
+		helper.saveResultToCsv(output_np, outputFile)
+		print("Attempted to save into csv")
 	else:
 		print("I am sad to say")
 		print(".")
