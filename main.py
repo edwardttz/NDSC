@@ -1,8 +1,9 @@
 import sys
+import datetime
+
 import helper
 import modelTrainer
 import dataProcessor
-import datetime
 
 # To train data into model, run this:
 # python main.py Train train.csv

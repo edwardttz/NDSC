@@ -1,6 +1,8 @@
 import numpy as np
-import helper
 import datetime
+import math
+
+import helper
 
 def processTestData(input_np):
 	print("Start processing data")
@@ -20,11 +22,12 @@ def processTestData(input_np):
 		str_count = len(str_list)
 		str_combi = helper.getAllCombiFromString(str_list, 0, 0, [])
 		result_dict = processDataBagOfWordsModel(str_combi, 0, model_dict, str_count, {})
-		top_result = max(result_dict.items(), key=lambda k: k[1])[0]
+		if(len(result_dict) >= 1):
+			top_result = max(result_dict.items(), key=lambda k: k[1])[0]
 		#if(count >= 50):
 		#	break
 		output_list += [[item_id, top_result]]
-		print(str(int(count/len(input_np) * 100)) + "%")
+		print(str(round(count/len(input_np) * 100, 2)) + "%")
 
 
 	output_np = np.array(output_list)
@@ -36,7 +39,7 @@ def processDataBagOfWordsModel(str_combi, x, model_dict, str_count, result_dict)
 	else:
 		word = str_combi[x]
 		str_list = word.split(' ')
-		weight = len(str_list) / str_count
+		weight = math.pow(2, len(str_list))
 		for cat_num in model_dict:
 			if(word in model_dict[cat_num] and cat_num not in result_dict):
 				result_dict[cat_num] = weight

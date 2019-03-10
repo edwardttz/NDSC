@@ -1,6 +1,7 @@
 import numpy as np
-import helper
 import datetime
+
+import helper
 
 def trainModel(input_np):
 	print("Start training model")
@@ -28,7 +29,7 @@ def trainModel(input_np):
 		str_combi = helper.getAllCombiFromString(str_list, 0, 0, [])
 		#print(str_combi)
 		model_dict = trainBagOfWordsModel(str_combi, 0, model_dict, item_cat)
-		print(int(count/len(input_np) * 100))
+		print(str(round(count/len(input_np) * 100, 2)) + "%")
 
 	# End result of model
 	helper.saveToJsonFile(model_dict, "bag_of_words_model.json")
