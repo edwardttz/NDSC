@@ -39,7 +39,7 @@ def processDataBagOfWordsModel(str_combi, x, model_dict, str_count, result_dict)
 	else:
 		word = str_combi[x]
 		str_list = word.split(' ')
-		weight = math.pow(2, len(str_list))
+		weight = len(str_list) / str_count
 		for cat_num in model_dict:
 			if(word in model_dict[cat_num] and cat_num not in result_dict):
 				result_dict[cat_num] = weight
