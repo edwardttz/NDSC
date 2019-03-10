@@ -14,17 +14,21 @@ def readCsvToNumpy(inputFile):
 	return input_np
 
 def saveResultToCsv(npArr, outputFile):
+	print(npArr.ndim)
 	fmt = ''
-	if(npArr.shape[0] != 0 and npArr.shape[1] >= 1):
+	if(npArr.ndim == 1):
 		fmt = '%s'
-		for i in range(npArr.shape[1] - 1):
+	elif(npArr.ndim > 1):
+		fmt = '%s'
+		for i in range(1, npArr.ndim):
 			fmt += ',%s'
-		outputFile = __path__ + outputFile
-		try:
-			np.savetxt(outputFile, npArr, delimiter=",", fmt=fmt)
-		except:
-			print("My brain is fried, please save me... :(")
-			exit()
+
+	outputFile = __path__ + outputFile
+	try:
+		np.savetxt(outputFile, npArr, delimiter=",", fmt=fmt)
+	except:
+		print("My brain is fried, please save me... :(")
+		exit()
 
 def readImageToNumpy(imageFile):
 	try:
@@ -47,3 +51,15 @@ def saveToJsonFile(json_dict, jsonFile):
 	jsonFile = __path__ + jsonFile
 	with open(jsonFile, "w") as json_write:
 		json.dump(json_dict, json_write)
+
+def getAllCombiFromString(str_list, x, y, combi_list):
+	if(x >= len(str_list)):
+		return combi_list
+	elif(y >= len(str_list)):
+		return getAllCombiFromString(str_list, x+1, x+1, combi_list)
+	else:
+		word = str_list[x]
+		for i in range(x+1,y+1):
+			word += ' ' + str_list[i]
+		combi_list.append(word)
+		return getAllCombiFromString(str_list, x, y+1, combi_list)

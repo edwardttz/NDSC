@@ -2,6 +2,7 @@ import sys
 import helper
 import modelTrainer
 import dataProcessor
+import datetime
 
 # To train data into model, run this:
 # python main.py Train train.csv
@@ -11,12 +12,13 @@ import dataProcessor
 
 def main():
 	action = sys.argv[1]
+	start_time = datetime.datetime.now()
 	if(action.__eq__('Train') and len(sys.argv) == 3):
 		inputFile = sys.argv[2]
 		input_np = helper.readCsvToNumpy(inputFile)
 		# Training model starts here
-		print("Start training model")
 		modelTrainer.trainModel(input_np)
+		print(datetime.datetime.now() - start_time)
 		print("Complete training model")
 		# Training model ends here
 	elif(action.__eq__('Validate') and len(sys.argv) == 4):
@@ -24,11 +26,11 @@ def main():
 		outputFile = sys.argv[3]
 		input_np = helper.readCsvToNumpy(inputFile)
 		# Process test data starts here
-		print("Start processing data")
 		output_np = dataProcessor.processTestData(input_np)
 		print("Complete processing data")
 		# Process test data ends here
 		helper.saveResultToCsv(output_np, outputFile)
+		print(datetime.datetime.now() - start_time)
 		print("Attempted to save into csv")
 	else:
 		print("I am sad to say")
