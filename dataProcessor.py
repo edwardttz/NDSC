@@ -9,6 +9,7 @@ def processTestData(input_np):
 	model_dict = helper.readJsonFile("bag_of_words_model.json")
 	output_list = [['itemid','Category']]
 	count = 0
+	print("Complete loading model")
 
 	for row in input_np:
 		count += 1
@@ -28,7 +29,7 @@ def processTestData(input_np):
 			top_result = max(result_dict.items(), key=lambda k: k[1])[0]
 		else:
 			top_result = -1
-		#if(count >= 50):
+		#if(count >= 200):
 		#	break
 		output_list += [[item_id, top_result]]
 		# End of BOW processing
@@ -40,16 +41,16 @@ def processTestData(input_np):
 		# End of Image processing
 
 
-		print(str(round(count/len(input_np) * 100, 2)) + "%")
+		print(str(round(float(count * 100) /len(input_np), 2)) + "%")
 
 	output_np = np.array(output_list)
 	return output_np
 
 def processDataBagOfWordsModel(str_combi, x, model_dict, str_count, result_dict):
 	stop_words = helper.getStopWords()
-	total_doc = len(model_dict)
+	total_doc = float(len(model_dict))
 	tf = 0
-	count_of_doc = 0
+	count_of_doc = 0.00
 	temp_dict = {}
 
 	if(x >= len(str_combi)):
@@ -60,13 +61,13 @@ def processDataBagOfWordsModel(str_combi, x, model_dict, str_count, result_dict)
 			# Ignoring all stopwords from the model
 			if(not word in stop_words and word in model_dict[cat_num]):
 				# Calculation of weight - TF
-				count_appeared = model_dict[cat_num][word]
-				num_of_terms = len(model_dict[cat_num])
+				count_appeared = float(model_dict[cat_num][word])
+				num_of_terms = float(len(model_dict[cat_num]))
 				if(cat_num not in temp_dict):
 					temp_dict[cat_num] = count_appeared / num_of_terms
 				else:
 					temp_dict[cat_num] += (count_appeared / num_of_terms)
-				count_of_doc += 1
+				count_of_doc += 1.00
 
 		# Calculation of weight - TF-IDF
 		# Adding into the result dictionary

@@ -1,4 +1,4 @@
-#import cv
+import cv2
 import numpy as np
 import json
 import nltk
@@ -6,10 +6,10 @@ from nltk.corpus import stopwords
 
 __path__ = "Test_Data/"
 nltk.download('stopwords')
-stop_words = set(stopwords.words('english'))
+__stop_words__ = set(stopwords.words('english'))
 
 def getStopWords():
-	return stop_words
+	return __stop_words__
 	
 def readCsvToNumpy(inputFile):
 	inputFile = __path__ + inputFile
@@ -21,7 +21,6 @@ def readCsvToNumpy(inputFile):
 	return input_np
 
 def saveResultToCsv(npArr, outputFile):
-	print(npArr.ndim)
 	fmt = ''
 	if(npArr.ndim == 1):
 		fmt = '%s'
@@ -39,11 +38,10 @@ def saveResultToCsv(npArr, outputFile):
 
 def readImageToNumpy(imageFile):
 	img = []
-#	try:
-#		img = np.array(cv.imread(imageFile, 1))
-#	except:
-#		print("Are you trying to read something out loud to me? I see no image here.")
-#		
+	try:
+		img = np.array(cv2.imread(imageFile, cv2.IMREAD_GRAYSCALE))
+	except:
+		print("Are you trying to read something out loud to me? I see no image here.")		
 	return img
 
 def readJsonFile(jsonFile):

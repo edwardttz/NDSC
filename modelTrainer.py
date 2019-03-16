@@ -23,7 +23,7 @@ def trainModel(input_np):
 			continue
 		item_title = row[1]
 		item_cat = row[2]
-		img_np = np.array(helper.readImageToNumpy(row[3]))
+		#img_np = np.array(helper.readImageToNumpy(row[3]))
 		
 		# Start of BOW training
 		str_list = item_title.split(' ')
@@ -37,7 +37,7 @@ def trainModel(input_np):
 
 		# Completion of Image training
 		
-		print(str(round(count/len(input_np) * 100, 2)) + "%")
+		print(str(round(float(count * 100) /len(input_np), 2)) + "%")
 
 	# End result of model
 	helper.saveToJsonFile(bow_model_dict, "bag_of_words_model.json")
@@ -49,8 +49,8 @@ def trainBagOfWordsModel(str_combi, x, model_dict, cat_num):
 		return model_dict
 	else:
 		word = str_combi[x]
-		# Ignoring all stopwords from the model
-		if(not word in stop_words):
+		# Ignoring all stopwords and numbers only from the model
+		if(not word in stop_words and not word.isdigit()):
 			if(word in model_dict[cat_num]):
 				model_dict[cat_num][word] += 1
 			else:
