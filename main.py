@@ -13,16 +13,21 @@ import dataProcessor
 
 def main():
 	action = sys.argv[1]
+	action = action.lower()
 	start_time = datetime.datetime.now()
-	if(action.__eq__('Train') and len(sys.argv) == 3):
+	if(action.__eq__('train') and len(sys.argv) == 3):
 		inputFile = sys.argv[2]
 		input_np = helper.readCsvToNumpy(inputFile)
 		# Training model starts here
 		modelTrainer.trainModel(input_np)
-		print(datetime.datetime.now() - start_time)
+
+		# Calculation of total time taken
+		print("Start Time: " + str(start_time))
+		print("End Time: " + str(datetime.datetime.now()))
+		print("Duration: " + str(datetime.datetime.now() - start_time))
 		print("Complete training model")
 		# Training model ends here
-	elif(action.__eq__('Validate') and len(sys.argv) == 4):
+	elif(action.__eq__('validate') and len(sys.argv) == 4):
 		inputFile = sys.argv[2]
 		outputFile = sys.argv[3]
 		input_np = helper.readCsvToNumpy(inputFile)
@@ -31,7 +36,11 @@ def main():
 		print("Complete processing data")
 		# Process test data ends here
 		helper.saveResultToCsv(output_np, outputFile)
-		print(datetime.datetime.now() - start_time)
+
+		# Calculation of total time taken
+		print("Start Time: " + str(start_time))
+		print("End Time: " + str(datetime.datetime.now()))
+		print("Duration: " + str(datetime.datetime.now() - start_time))
 		print("Attempted to save into csv")
 	else:
 		print("I am sad to say")
