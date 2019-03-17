@@ -4,15 +4,15 @@ import json
 import nltk
 from nltk.corpus import stopwords
 
-__path__ = "Test_Data/"
+PATH = "Test_Data/"
 nltk.download('stopwords')
-__stop_words__ = set(stopwords.words('english'))
+STOP_WORDS = set(stopwords.words('english'))
 
 def getStopWords():
-	return __stop_words__
+	return STOP_WORDS
 	
 def readCsvToNumpy(inputFile):
-	inputFile = __path__ + inputFile
+	inputFile = PATH + inputFile
 	try:
 		input_np = np.genfromtxt(inputFile, delimiter=',', dtype='unicode_')
 	except:
@@ -29,7 +29,7 @@ def saveResultToCsv(npArr, outputFile):
 		for i in range(1, npArr.ndim):
 			fmt += ',%s'
 
-	outputFile = __path__ + outputFile
+	outputFile = PATH + outputFile
 	try:
 		np.savetxt(outputFile, npArr, delimiter=",", fmt=fmt)
 	except:
@@ -39,13 +39,13 @@ def saveResultToCsv(npArr, outputFile):
 def readImageToNumpy(imageFile):
 	img = []
 	try:
-		img = np.array(cv2.imread(imageFile, cv2.IMREAD_GRAYSCALE))
+		img = cv2.imread(imageFile, cv2.IMREAD_GRAYSCALE)
 	except:
-		print("Are you trying to read something out loud to me? I see no image here.")		
+		print("Are you trying to read something out loud to me? I see no image here.")
 	return img
 
 def readJsonFile(jsonFile):
-	jsonFile = __path__ + jsonFile
+	jsonFile = PATH + jsonFile
 	try:
 		with open(jsonFile) as json_file:
 			jsonArr = json.load(json_file)
@@ -54,7 +54,7 @@ def readJsonFile(jsonFile):
 	return jsonArr
 
 def saveToJsonFile(json_dict, jsonFile):
-	jsonFile = __path__ + jsonFile
+	jsonFile = PATH + jsonFile
 	with open(jsonFile, "w") as json_write:
 		json.dump(json_dict, json_write)
 
