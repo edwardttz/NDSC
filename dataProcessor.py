@@ -6,10 +6,11 @@ import helper
 
 def processTestData(input_np):
 	print("Start processing data")	
-	output_list = [['itemid','Category']]
+	output_list = [["itemid","BOW Category", "BOW acc", "TF Category", "Same Result"]]
 	count = 0
 	model_dict = helper.readJsonFile("bag_of_words_model.json")
-	print("Complete loading model")
+	tf_model = helper.loadTFModel("img_tf.model")
+	print("Complete loading models")
 
 	# Start of testing data
 	for row in input_np:
@@ -19,8 +20,9 @@ def processTestData(input_np):
 			continue
 		item_id = row[0]
 		item_title = row[1]
-		img_np = np.array(helper.readImageToNumpy(row[2]))
-		
+		img_np = np.array(helper.readImage(row[2]))
+		new_img_np = prepareImg(img_np)
+
 		# Start processing via BOW model
 		str_list = item_title.split(' ')
 		str_count = len(str_list)
@@ -28,18 +30,20 @@ def processTestData(input_np):
 		result_dict = processDataBagOfWordsModel(str_combi, 0, model_dict, str_count, {})
 
 		if(len(result_dict) >= 1):
-			top_result = max(result_dict.items(), key=lambda k: k[1])[0]
+			top_result = int(max(result_dict.items(), key=lambda k: k[1])[0])
 		else:
 			top_result = -1
-		
 		# End of BOW processing
 
 		# Start processing via Image Training model
-
-
-
+		if(not new_img_np == []):
+			prediction = predictImgCategory(tf_model, new_img_np)
+		else:
+			prediction = -1
 		# End of Image processing
-		output_list += [[item_id, top_result, result_dict[top_result] * 100]]
+
+		check = (prediction == top_result)
+		output_list += [[item_id, top_result, result_dict[top_result] * 100], prediction, check]
 		if(count >= 200):
 			break
 
@@ -47,6 +51,10 @@ def processTestData(input_np):
 
 	output_np = np.array(output_list)
 	return output_np
+
+def predictImgCategory(tf_model, img_np):
+	prediction = model.predict(img_np)
+	return int(prediction[0][0])
 
 def processDataBagOfWordsModel(str_combi, x, model_dict, str_count, result_dict):
 	STOP_WORDS = helper.getStopWords()

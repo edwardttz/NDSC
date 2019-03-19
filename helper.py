@@ -1,16 +1,21 @@
-import cv2
-import numpy as np
 import json
+import numpy as np
+import cv2
 import nltk
 from nltk.corpus import stopwords
+import tensorflow as tf
 
 PATH = "Test_Data/"
 nltk.download('stopwords')
 STOP_WORDS = set(stopwords.words('english'))
+IMG_SIZE = 250
 
 def getStopWords():
 	return STOP_WORDS
-	
+
+def getImgSize():
+	return IMG_SIZE
+
 def readCsvToNumpy(inputFile):
 	inputFile = PATH + inputFile
 	try:
@@ -36,7 +41,7 @@ def saveResultToCsv(npArr, outputFile):
 		print("My brain is fried, please save me... :(")
 		exit()
 
-def readImageToNumpy(imageFile):
+def readImage(imageFile):
 	img = []
 	try:
 		img = cv2.imread(imageFile, cv2.IMREAD_GRAYSCALE)
@@ -69,3 +74,28 @@ def getAllCombiFromString(str_list, x, y, combi_list):
 			word += ' ' + str_list[i]
 		combi_list.append(word)
 		return getAllCombiFromString(str_list, x, y+1, combi_list)
+
+def saveTFModel(model, fileName):
+	fileName = PATH + fileName
+	model.save(fileName)
+
+def loadTFModel(fileName):
+	fileName = PATH + fileName
+	model = tf.keras.models.load_model(fileName)
+	return model
+
+def prepareImg(img_np):
+	new_img_np, valid = resizeImg(img_np)
+	if(valid == 0):
+		return new_img_np.reshape(-1, IMG_SIZE, IMG_SIZE, 1)
+	else:
+		return []
+
+def resizeImg(img_np):
+	img_arr = []
+	try:
+		img_arr = cv2.resize(img_np, (IMG_SIZE, IMG_SIZE))
+		return img_arr, 0
+	except Exception as e:
+		print("No image found in folder")
+		return img_arr, -1
