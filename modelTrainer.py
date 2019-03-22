@@ -18,7 +18,7 @@ def trainModel(inputFile, action):
 		IMG_SIZE = helper.getImgSize()
 		#features = np.array(helper.readPickle("features.pickle")).reshape(-1, IMG_SIZE, IMG_SIZE, 1) / 255.0
 		# This line is to ensure system is still able to load pickle file using 8GB RAM
-		features = np.array(pickle.load(open("Test_Data/features.pickle","rb"))).reshape(-1, IMG_SIZE, IMG_SIZE, 1) / 255.0
+		features = np.array(pickle.load(open("Test_Data/" + inputFile,"rb"))).reshape(-1, IMG_SIZE, IMG_SIZE, 1) / 255.0
 		label = helper.readPickle("label.pickle")
 	else:
 		input_np = helper.readCsvToNumpy(inputFile)
