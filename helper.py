@@ -4,13 +4,14 @@ import cv2
 import nltk
 from nltk.corpus import stopwords
 import tensorflow as tf
+import pickle
 
 PATH = "Test_Data/"
-nltk.download('stopwords')
-STOP_WORDS = set(stopwords.words('english'))
-IMG_SIZE = 250
+IMG_SIZE = 100
 
 def getStopWords():
+	nltk.download('stopwords')
+	STOP_WORDS = set(stopwords.words('english'))
 	return STOP_WORDS
 
 def getImgSize():
@@ -48,6 +49,16 @@ def readImage(imageFile):
 	except:
 		print("Are you trying to read something out loud to me? I see no image here.")
 	return img
+
+def readPickle(fileName):
+	fileName = PATH + fileName
+	return pickle.load(open(fileName,"rb"))
+
+def savePickle(fileName, item):
+	fileName = PATH + fileName
+	pickle_out = open(fileName,"wb")
+	pickle.dump(item, pickle_out)
+	pickle_out.close()
 
 def readJsonFile(jsonFile):
 	jsonFile = PATH + jsonFile
@@ -97,5 +108,4 @@ def resizeImg(img_np):
 		img_arr = cv2.resize(img_np, (IMG_SIZE, IMG_SIZE))
 		return img_arr, 0
 	except Exception as e:
-		print("No image found in folder")
 		return img_arr, -1

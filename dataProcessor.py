@@ -4,10 +4,13 @@ import math
 
 import helper
 
-def processTestData(input_np):
-	print("Start processing data")	
-	output_list = [["itemid","BOW Category", "BOW acc", "TF Category", "Same Result"]]
+def processTestData(inputFile, outputFile):
+	print("Start processing data")
+
+	input_np = helper.readCsvToNumpy(inputFile)
+	output_list = [["itemid", "Category", "BOW Category", "BOW acc", "TF Category", "TR acc"]]
 	count = 0
+
 	model_dict = helper.readJsonFile("bag_of_words_model.json")
 	tf_model = helper.loadTFModel("img_tf.model")
 	print("Complete loading models")
@@ -21,7 +24,7 @@ def processTestData(input_np):
 		item_id = row[0]
 		item_title = row[1]
 		img_np = np.array(helper.readImage(row[2]))
-		new_img_np = prepareImg(img_np)
+		new_img_np = helper.prepareImg(img_np)
 
 		# Start processing via BOW model
 		str_list = item_title.split(' ')
@@ -42,22 +45,27 @@ def processTestData(input_np):
 			prediction = -1
 		# End of Image processing
 
-		check = (prediction == top_result)
-		output_list += [[item_id, top_result, result_dict[top_result] * 100], prediction, check]
-		if(count >= 200):
-			break
+		if(prediction == -1 and top_result == -1):
+			final_result = math.randrange(0, 57)
+		elif(prediction == top_result):
+			final_result = prediction
+		elif(prediction == -1):
+			final_result = top_result
+		elif(top_result == -1):
+			final_result = prediction
+		else:
+			final_result = -1
 
-		print(str(round(float(count * 100) /len(input_np), 2)) + "%")
-
-	output_np = np.array(output_list)
-	return output_np
+		output_list += [[item_id, final_result, top_result, result_dict[top_result] * 100, prediction]]
+		print(str(round(float(count * 100) /len(input_np), 2)) + "%", end="\r", flush=True)
+	
+	helper.saveResultToCsv(np.array(output_list), outputFile)
 
 def predictImgCategory(tf_model, img_np):
 	prediction = model.predict(img_np)
 	return int(prediction[0][0])
 
 def processDataBagOfWordsModel(str_combi, x, model_dict, str_count, result_dict):
-	STOP_WORDS = helper.getStopWords()
 	total_doc = float(len(model_dict))
 	count_of_doc = 0.00
 	temp_dict = {}
@@ -67,8 +75,7 @@ def processDataBagOfWordsModel(str_combi, x, model_dict, str_count, result_dict)
 	else:
 		word = str_combi[x]
 		for cat_num in model_dict:
-			# Ignoring all stopwords from the model
-			if(not word in STOP_WORDS and word in model_dict[cat_num]):
+			if(word in model_dict[cat_num]):
 				# Calculation of weight - TF
 				count_appeared = float(model_dict[cat_num][word])
 				num_of_terms = float(len(model_dict[cat_num]))
