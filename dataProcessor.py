@@ -8,7 +8,7 @@ def processTestData(inputFile, outputFile):
 	print("Start processing data")
 
 	input_np = helper.readCsvToNumpy(inputFile)
-	output_list = [["itemid", "Category", "BOW Category", "BOW acc", "TF Category", "TR acc"]]
+	output_list = [["itemid", "Category"]]
 	count = 0
 
 	model_dict = helper.readJsonFile("bag_of_words_model.json")
@@ -34,13 +34,14 @@ def processTestData(inputFile, outputFile):
 
 		if(len(result_dict) >= 1):
 			top_result = int(max(result_dict.items(), key=lambda k: k[1])[0])
+			word_accuracy = result_dict[top_result]
 		else:
 			top_result = -1
 		# End of BOW processing
 
 		# Start processing via Image Training model
 		if(not new_img_np == []):
-			prediction = predictImgCategory(tf_model, new_img_np)
+			prediction, img_accuracy = predictImgCategory(tf_model, new_img_np)
 		else:
 			prediction = -1
 		# End of Image processing
@@ -53,10 +54,12 @@ def processTestData(inputFile, outputFile):
 			final_result = top_result
 		elif(top_result == -1):
 			final_result = prediction
+		elif(word_accuracy > img_accuracy):
+			final_result = top_result
 		else:
-			final_result = -1
+			final_result = prediction
 
-		output_list += [[item_id, final_result, top_result, result_dict[top_result] * 100, prediction]]
+		output_list += [[item_id, final_result]]
 		print(str(round(float(count * 100) /len(input_np), 2)) + "%", end="\r", flush=True)
 	
 	helper.saveResultToCsv(np.array(output_list), outputFile)
