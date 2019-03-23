@@ -25,13 +25,12 @@ def trainModel(inputFile, action):
 
 	if(action == 0):
 		# Start of Image training part 2 - Training of model
-		dense_layers = [0, 1, 2]
-		layer_sizes = [32, 64, 128]
-		conv_layers = [1, 2, 3]
+		dense_layers = [0]
+		layer_sizes = [64]
+		conv_layers = [3]
 		
 		model = trainTFModel(dense_layers, layer_sizes, conv_layers, features, label)
-
-		# helper.saveTFModel(model, "img_tf.model")
+		helper.saveTFModel(model, "img_tf.model")
 	elif(action == 1):
 		# Start of Image training part 1 - Extraction of features and label
 		prepareTFModel(input_np)
