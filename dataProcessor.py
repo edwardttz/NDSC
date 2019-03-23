@@ -1,6 +1,7 @@
 import numpy as np
 import datetime
 import math
+from tensorflow import contrib
 
 import helper
 
@@ -65,8 +66,13 @@ def processTestData(inputFile, outputFile):
 	helper.saveResultToCsv(np.array(output_list), outputFile)
 
 def predictImgCategory(tf_model, img_np):
+	features = np.array(helper.readPickle("features.pickle")).reshape(-1, IMG_SIZE, IMG_SIZE, 1) / 255.0
+	tfe = contrib.eager
+	epoch_accuracy = tfe.metrics.Accuracy()
+	
 	prediction = model.predict(img_np)
-	return int(prediction[0][0])
+	img_accy = epoch_accuracy(tf.argmax(model(features), axis=1, output_type=tf.int32), y).result()
+	return int(prediction[0][0]), img_accy
 
 def processDataBagOfWordsModel(str_combi, x, model_dict, str_count, result_dict):
 	total_doc = float(len(model_dict))

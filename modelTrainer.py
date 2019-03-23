@@ -16,9 +16,9 @@ def trainModel(inputFile, action):
 	# Loading of initial data
 	if(action == 0):
 		IMG_SIZE = helper.getImgSize()
-		#features = np.array(helper.readPickle("features.pickle")).reshape(-1, IMG_SIZE, IMG_SIZE, 1) / 255.0
+		features = np.array(helper.readPickle("features.pickle")).reshape(-1, IMG_SIZE, IMG_SIZE, 1) / 255.0
 		# This line is to ensure system is still able to load pickle file using 8GB RAM
-		features = np.array(pickle.load(open("Test_Data/" + inputFile,"rb"))).reshape(-1, IMG_SIZE, IMG_SIZE, 1) / 255.0
+		#features = np.array(pickle.load(open("Test_Data/" + inputFile,"rb"))).reshape(-1, IMG_SIZE, IMG_SIZE, 1) / 255.0
 		label = helper.readPickle("label.pickle")
 	else:
 		input_np = helper.readCsvToNumpy(inputFile)
@@ -94,9 +94,9 @@ def prepareTFModel(input_np):
 		print(str(round(float(count * 100) /len(input_np), 2)) + "%", end="\r", flush=True)
 
 	helper.savePickle("label.pickle", label)
-	#helper.savePickle("features.pickle", features)
+	helper.savePickle("features.pickle", features)
 	# This line is to ensure system is still able to save pickle file using 8GB RAM
-	pickle.dump(features, open("Test_Data/features.pickle","wb"))
+	#pickle.dump(features, open("Test_Data/features.pickle","wb"))
 
 def insertRawImageData(features, label, img_np, cat_num):
 	IMG_SIZE = helper.getImgSize()
